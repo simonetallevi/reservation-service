@@ -1,5 +1,7 @@
 package com.example.reservationservice;
 
+import io.sentry.Sentry;
+import io.sentry.event.UserBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -19,9 +21,15 @@ public class MessageRestController {
 
     @RequestMapping("/message")
     public String read(){
+
+        Sentry.init();
+        Sentry.getContext().setUser(
+                new UserBuilder().setUsername("user1").build()
+        );
+
         log.error("message : {}", message);
         if(true)
-            throw new IllegalStateException("ERORR");
+            throw new IllegalStateException("ERORR - 2");
         return this.message;
     }
 }
